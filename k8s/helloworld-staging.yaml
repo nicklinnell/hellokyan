@@ -26,6 +26,6 @@ spec:
     spec:
       containers:
       - name: hellokyan
-        image: hellokyan
+        image: nicklinnell/hellokyan:staging
         ports:
         - containerPort: 3000
