@@ -41,5 +41,5 @@ jobs:
           cd review-apps
           cat preview.yaml | kyml tmpl -e APP_ID | tee helm/templates/"${{ env.APP_ID }}".yaml
           git add .
-          git commit -m "Adding PR ${{ github.event.number }} from ${{ github.repository }}"
+          git diff-index --quiet HEAD || git commit -m "Adding PR ${{ github.event.number }} from ${{ github.repository }}"
           git push origin master
