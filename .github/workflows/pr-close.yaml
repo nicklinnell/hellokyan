@@ -1,0 +1,28 @@
+name: Pull Request Closed
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  remove_review_app:
+    name: Remove review app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set env variables
+        run: |
+          export APP_ID=pr-${{ github.event.number }}
+          echo "APP_ID=$APP_ID" >> $GITHUB_ENV
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+           name: id_rsa # optional
+           known_hosts: ${{ secrets.KNOWN_HOSTS }}
+      - run: |
+          git clone git@github.com:nicklinnell/review-apps.git
+          git config --global user.email "nick@kyan.com"
+          git config --global user.name "nicklinnell"
+          cd review-apps
+          git rm helm/templates/${{ env.APP_ID }}.yaml
+          git commit -m "Removing PR ${{ github.event.number }} from ${{ github.repository }}"
+          git push origin master
