@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Set env variables
         run: |
-          export APP_ID=pr-${{ github.event.number }}
+          export APP_ID=pr-${{ github.event.repository.name }}-${{ github.event.number }}
           echo "APP_ID=$APP_ID" >> $GITHUB_ENV
 
       - name: Install SSH key
