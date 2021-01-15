@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "{{.APP_ID}}"
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: review-apps
+  source:
+    path: helm
+    repoURL: https://github.com/nicklinnell/review-apps.git
+    targetRevision: HEAD
+    helm:
+      values: |
+        image:
+          repository: nicklinnell/hellokyan
+          tag: "{{.TAG_ID}}"
+        ingress:
+          host: {{.APP_ID}}.example.com
+      version: v3
+  destination:
+    namespace: "{{.APP_ID}}"
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
