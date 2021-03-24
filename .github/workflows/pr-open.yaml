@@ -2,11 +2,23 @@ name: Publish Docker image
 on: 
   pull_request:
     types: [opened, reopened, synchronize]
+  issue_comment:
+    types: [created]
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     steps:
+      - uses: khan/pill-request-comment-trigger@master
+        id: check
+        with:
+          trigger: '@deploy'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+      - run: 'Triggered deployment'
+        if: steps.check.outputs.triggered == 'true'
+
       - uses: docker/setup-buildx-action@v1
       - name: Check out the repo
         uses: actions/checkout@v2
