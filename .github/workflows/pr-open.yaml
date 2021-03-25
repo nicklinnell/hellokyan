@@ -1,7 +1,9 @@
 name: Publish Docker image
 on: 
   pull_request:
-    types: [opened, reopened, synchronize]
+  #   types: [opened, reopened, synchronize]
+    types:
+      - labeled
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
