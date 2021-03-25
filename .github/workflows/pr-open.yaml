@@ -1,7 +1,7 @@
 name: Publish Docker image
 on: 
-  pull_request:
-    types: [opened, reopened, synchronize]
+  # pull_request:
+  #   types: [opened, reopened, synchronize]
   issue_comment:
     types: [created]
 jobs:
@@ -13,9 +13,9 @@ jobs:
         id: check
         with:
           trigger: '@deploy'
-          # reaction: rocket
-        # env:
-          # GITHUB_TOKEN: '${{ secrets.API_TOKEN_GITHUB }}'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: '${{ secrets.API_TOKEN_GITHUB }}'
       - run: 'Triggered deployment'
         if: steps.check.outputs.triggered == 'true'
 
